@@ -1,0 +1,159 @@
+/* --- 맞춤법 검사기 테마 (블루/그린) --- */
+:root {
+    --main-blue: #5D80EC;
+    --secondary-blue: #7C5DEC;
+    --success-green: #32CD32;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --card-bg: #FFFFFF;
+    --page-bg: #F4F7FC;
+    --border-light: #E0E0E0;
+}
+
+body {
+    background-color: var(--page-bg);
+    font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* 카드 헤더 */
+.card-header {
+    position: relative;
+    padding-bottom: 20px;
+}
+.header-gradient {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, var(--main-blue), var(--secondary-blue));
+    z-index: 1;
+}
+.header-content {
+    position: relative;
+    z-index: 2;
+    padding: 25px 30px 20px;
+    color: white;
+}
+.header-content h2 { margin: 0; font-size: 24px; }
+.header-content p { margin: 5px 0 0; opacity: 0.9; }
+
+.card-body {
+    padding: 30px;
+}
+
+/* --- [추가] 파일 업로드 스타일 --- */
+.drop-zone {
+    position: relative;
+    border: 2px dashed var(--border-light);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #F8F9FA;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.drop-zone:hover, .drop-zone.is-dragover {
+    background-color: #F1F3F5;
+    border-color: var(--main-blue);
+}
+.drop-zone-prompt i {
+    font-size: 30px;
+    color: var(--main-blue);
+    margin-bottom: 15px;
+}
+.drop-zone-prompt p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+.drop-zone-prompt span {
+    font-size: 14px;
+    color: var(--text-light);
+}
+.drop-zone input[type="file"] {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0; /* 인풋 숨기기 */
+    cursor: pointer;
+}
+
+/* [추가] 파일 목록 */
+#fileList {
+    margin-top: 20px;
+    font-size: 15px;
+}
+#fileList div {
+    padding: 8px 12px;
+    background-color: #F1F3F5;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+/* 버튼 스타일 */
+.primary-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: var(--main-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: filter 0.2s ease;
+}
+.primary-button:hover {
+    filter: brightness(0.9);
+}
+.primary-button:disabled {
+    background-color: #A0A0A0;
+    cursor: not-allowed;
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+    padding: 40px 30px;
+    text-align: center;
+    color: var(--text-light);
+}
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--main-blue);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
