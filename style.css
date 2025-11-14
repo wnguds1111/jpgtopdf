@@ -350,4 +350,22 @@ body {
     font-size: 20px;
     color: var(--text-light);
 }
+/* style.css */
+
+:root {
+    --main-blue: #5D80EC;
+    --secondary-blue: #7C5DEC;
+    --success-green: #32CD32;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --card-bg: #FFFFFF;
+    
+    /* --- 여기가 수정되었습니다! --- */
+    --page-bg: #F9FBF9; /* (아주 연한 녹색 톤) */
+    /* --------------------------- */
+    
+    --border-light: #E0E0E0;
+}
+
+/* ... (이하 모든 코드는 동일) ... */
 /* ... (로딩 스피너 및 기타 기존 스타일 유지) ... */
