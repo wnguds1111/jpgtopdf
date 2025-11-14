@@ -1,5 +1,5 @@
 // app.js
-// [수정] finally 블록의 'updateFileList()' 호출을 'fileList.innerHTML = '' 로 수정
+// [수정] 압축 품질을 1024, 0.8 -> 1920, 0.9로 상향 조정
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleUserFiles(e.dataTransfer.files);
     });
 
-    // [수정] 사용자가 선택한 원본 파일을 처리하는 함수
+    // 사용자가 선택한 원본 파일을 처리하는 함수
     async function handleUserFiles(files) {
         selectedFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
         processedFiles = [];
@@ -58,8 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             fileList.appendChild(listItem);
 
             try {
-                // [핵심] 이미지 압축 함수 호출
-                const compressedFile = await compressImage(file, 1024, 0.8);
+                // --- 여기가 수정되었습니다! ---
+                // 최대 너비 1920px, 품질 90%(0.9)로 상향
+                const compressedFile = await compressImage(file, 1920, 0.9);
+                // ---------------------------
                 
                 processedFiles.push(compressedFile);
 
@@ -81,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [새로 추가] 이미지 압축 및 리사이징 함수
+    // 이미지 압축 및 리사이징 함수
     function compressImage(file, maxWidth, quality) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -168,16 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // [수정] 성공 후 파일 목록 초기화
             selectedFiles = [];
             processedFiles = [];
-            
-            // --- 여기가 수정되었습니다! ---
-            // updateFileList(); // <-- 이 코드가 에러의 원인
-            fileList.innerHTML = ''; // <-- 이렇게 UI를 직접 초기화합니다.
-            // ---------------------------
-            
-            convertButton.disabled = true; // 버튼 비활성화
+            fileList.innerHTML = '';
+            convertButton.disabled = true;
 
         } catch (error) {
             console.error('Conversion Error:', error);
