@@ -286,4 +286,68 @@ body {
     font-size: 20px;
     color: var(--text-light);
 }
+
+/* --- [새로 추가] 프로모션 배너 스타일 --- */
+.promo-banner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    
+    /* --- 여기가 수정되었습니다! --- */
+    background: #E6F7ED; /* 아주 연한 녹색 (성공 테마) */
+    /* --------------------------- */
+
+    padding: 18px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: var(--text-dark); /* 텍스트 색상 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 20px; /* 위쪽 여백 추가 */
+}
+
+.promo-banner:hover {
+    transform: translateY(-3px); /* 호버 시 살짝 위로 */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.banner-icon {
+    font-size: 28px;
+    
+    /* --- 여기가 수정되었습니다! --- */
+    color: var(--success-green); /* 아이콘 색상 (녹색) */
+    /* --------------------------- */
+    
+    background-color: white;
+    padding: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.banner-content {
+    flex-grow: 1;
+}
+
+.banner-content h3 {
+    margin: 0;
+    font-size: 18px;
+    
+    /* --- 여기가 수정되었습니다! --- */
+    color: #2E7D32; /* 진한 녹색 (테마 일치) */
+    /* --------------------------- */
+}
+
+.banner-content p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.banner-arrow i {
+    font-size: 20px;
+    color: var(--text-light);
+}
 /* ... (로딩 스피너 및 기타 기존 스타일 유지) ... */
