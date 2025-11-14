@@ -1,4 +1,5 @@
 // app.js
+// [수정] finally 블록의 'updateFileList()' 호출을 'fileList.innerHTML = '' 로 수정
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -9,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const convertButton = document.getElementById('convertButton');
     const loadingIndicator = document.getElementById('loadingIndicator');
 
-    let selectedFiles = []; // 사용자가 선택한 원본 파일 목록
-    let processedFiles = []; // 압축/처리된 파일 목록
+    let selectedFiles = [];
+    let processedFiles = [];
 
     // 파일 인풋이 변경될 때
     fileInput.addEventListener('change', () => {
@@ -31,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
         handleUserFiles(e.dataTransfer.files);
     });
 
-    // --- [수정] 사용자가 선택한 원본 파일을 처리하는 함수 ---
+    // [수정] 사용자가 선택한 원본 파일을 처리하는 함수
     async function handleUserFiles(files) {
         selectedFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
-        processedFiles = []; // 이전 처리된 파일 초기화
+        processedFiles = [];
 
         fileList.innerHTML = ''; // 파일 목록 UI 초기화
         
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        convertButton.disabled = true; // 처리 중 버튼 비활성화
+        convertButton.disabled = true;
         fileList.innerHTML = `<div class="processing-message"><i class="fas fa-spinner fa-spin"></i> 이미지 압축 중...</div>`;
 
         for (const file of selectedFiles) {
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // [핵심] 이미지 압축 함수 호출
-                const compressedFile = await compressImage(file, 1024, 0.8); // 최대 너비 1024px, 품질 0.8
+                const compressedFile = await compressImage(file, 1024, 0.8);
                 
                 processedFiles.push(compressedFile);
 
@@ -72,8 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // 모든 파일 처리 후 버튼 활성화
-        fileList.querySelector('.processing-message')?.remove(); // 메시지 삭제
+        fileList.querySelector('.processing-message')?.remove();
         convertButton.disabled = processedFiles.length === 0;
         if (processedFiles.length > 0) {
             const totalSize = processedFiles.reduce((sum, f) => sum + f.size, 0);
@@ -81,11 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- [새로 추가] 이미지 압축 및 리사이징 함수 ---
+    // [새로 추가] 이미지 압축 및 리사이징 함수
     function compressImage(file, maxWidth, quality) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+            reader.readAsDataURL(file);
             reader.onload = (event) => {
                 const img = new Image();
                 img.src = event.target.result;
@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     let width = img.width;
                     let height = img.height;
 
-                    // 최대 너비보다 크면 비율에 맞춰 리사이징
                     if (width > maxWidth) {
                         height = Math.round(height * (maxWidth / width));
                         width = maxWidth;
@@ -105,25 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     canvas.height = height;
 
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height); // 이미지 그리기
+                    ctx.drawImage(img, 0, 0, width, height); 
 
-                    // 캔버스 내용을 Data URL (JPG)로 변환
-                    // toBlob로 File 객체로 변환하여 resolve
                     canvas.toBlob(
                         (blob) => {
                             if (!blob) {
                                 reject(new Error('Canvas to Blob failed.'));
                                 return;
                             }
-                            // 압축된 Blob을 원본 파일 이름으로 File 객체로 변환
                             const compressedFile = new File([blob], file.name, {
-                                type: 'image/jpeg', // JPG로 강제 변환
+                                type: 'image/jpeg',
                                 lastModified: Date.now(),
                             });
                             resolve(compressedFile);
                         },
-                        'image/jpeg', // JPG 형식으로
-                        quality // 압축 품질 (0.0 ~ 1.0)
+                        'image/jpeg',
+                        quality
                     );
                 };
                 img.onerror = (error) => reject(error);
@@ -146,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         convertButton.innerHTML = '<i class="fas fa-cog fa-spin"></i> 변환 중...';
 
         const formData = new FormData();
-        processedFiles.forEach(file => { // 압축된 파일을 FormData에 추가
+        processedFiles.forEach(file => {
             formData.append('images', file);
         });
 
@@ -157,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                // [수정] 서버 에러 메시지를 받아와서 보여주기
                 const errorText = await response.text();
                 throw new Error(`PDF 변환에 실패했습니다: ${response.status} - ${errorText}`);
             }
@@ -173,10 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // [추가] 성공 후 파일 목록 초기화
+            // [수정] 성공 후 파일 목록 초기화
             selectedFiles = [];
             processedFiles = [];
-            updateFileList(); // UI 업데이트
+            
+            // --- 여기가 수정되었습니다! ---
+            // updateFileList(); // <-- 이 코드가 에러의 원인
+            fileList.innerHTML = ''; // <-- 이렇게 UI를 직접 초기화합니다.
+            // ---------------------------
+            
             convertButton.disabled = true; // 버튼 비활성화
 
         } catch (error) {
