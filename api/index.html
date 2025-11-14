@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 → PDF 변환기</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="card input-section">
+            <div class="card-header">
+                <div class="header-gradient"></div>
+                <div class="header-content">
+                    <h2>이미지 → PDF 변환기</h2>
+                    <p>JPG, PNG 파일을 PDF로 합쳐줍니다</p>
+                </div>
+            </div>
+            
+            <form id="uploadForm" class="card-body">
+                <div id="dropZone" class="drop-zone">
+                    <input type="file" id="fileInput" multiple accept="image/png, image/jpeg">
+                    <div class="drop-zone-prompt">
+                        <i class="fas fa-file-upload"></i>
+                        <p>여기에 이미지를 드래그하거나 클릭해서 업로드하세요</p>
+                        <span>(여러 장 선택 가능)</span>
+                    </div>
+                </div>
+                
+                <div id="fileList"></div>
+
+                <button type="submit" id="convertButton" class="primary-button" disabled>
+                    <i class="fas fa-file-pdf"></i> PDF로 변환하기
+                </button>
+            </form>
+        </div>
+
+        <div class="card" id="loadingIndicator" style="display: none;">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>PDF 파일을 생성 중입니다...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
