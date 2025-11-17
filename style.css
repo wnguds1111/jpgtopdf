@@ -307,12 +307,12 @@ body {
 
 /* --- 쿠팡 파트너스 배너 --- */
 .ads-banner.coupang-area {
-    margin-top: 40px;
+    margin-top: 40px; /* 윗 콘텐츠와의 간격 */
     padding-top: 20px;
     border-top: 1px dashed #eee; /* 콘텐츠와 구분을 위한 상단 점선 */
     width: 100%;
     /* iframe 원본 최대 너비인 680px로 제한합니다. 
-      사이트의 .card-container 너비보다 크다면 이 값을 조절하세요.
+       사이트의 카드 너비보다 크다면 이 값을 조절하세요. 
     */
     max-width: 680px; 
     margin-left: auto;
@@ -329,23 +329,20 @@ body {
 
 /* iframe 반응형 래퍼 */
 .coupang-area .coupang-iframe-wrap {
-    /* 이 래퍼가 iframe을 반응형으로 만듭니다.
-      width: 100% -> 부모(.ads-banner)의 너비를 따름
-      max-width: 680px -> 하지만 680px보다 커지진 않음
-    */
+    /* 이 래퍼가 iframe을 반응형으로 만듭니다. */
     position: relative;
     width: 100%;
-    max-width: 680px;
+    max-width: 680px; /* HTML의 width와 동일하게 설정 */
     margin: 0 auto;
     overflow: hidden;
 }
 
 .coupang-area iframe {
     /* HTML에 적힌 width="680" 속성을 무시하고 
-      CSS로 100% 덮어씁니다. (모바일 대응)
+       CSS로 100% 덮어씁니다. (모바일 대응)
     */
     width: 100%;
-    height: 140px; /* 높이는 140px로 고정 (캐러셀이므로) */
+    height: 140px; /* 높이는 140px로 고정 */
     border: none;
     scrolling: "no";
 }
