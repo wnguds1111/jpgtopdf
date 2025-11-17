@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script>
+      (function() {
+        var userLang = navigator.language || navigator.userLanguage; 
+        var currentPath = window.location.pathname;
+        
+        // 언어가 'ko' (한국어)로 시작하지 않고,
+        // 이미 '/en/' 페이지에 있는 것도 아니라면
+        if (!userLang.startsWith('ko') && !currentPath.includes('/en/')) {
+          
+          // 영어 버전(/en/index.html)으로 즉시 리디렉션
+          window.location.replace('/en/index.html');
+        }
+      })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이미지 → PDF 변환기</title>
+    <title>JPG to PDF 변환기 🚀 (초간단 이미지 PDF 변환)</title>
+    
+    <link rel="alternate" hreflang="ko-kr" href="https://jpgtopdf-five.vercel.app/index.html">
+    <link rel="alternate" hreflang="en" href="https://jpgtopdf-five.vercel.app/en/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://jpgtopdf-five.vercel.app/en/index.html">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="google-site-verification" content="k5fvFLJn1vxLK_u7ffEtv1ODfDCiLroQVPGr0-YJag8" />
