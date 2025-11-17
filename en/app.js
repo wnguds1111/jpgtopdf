@@ -1,5 +1,6 @@
 // [파일 이름: en/app.js] - (영어 번역본 예시)
-
+// ✅ [추가] 이 한 줄을 추가해 주세요.
+const dropZonePrompt = document.querySelector('.drop-zone-prompt');
 // ... (기존 PDF 생성 로직은 동일) ...
 
 // [p]를 클릭하면 파일 선택창이 뜨도록 함
