@@ -2,7 +2,7 @@
 // [수정] 압축 품질을 1024, 0.8 -> 1920, 0.9로 상향 조정
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+    const dropZonePrompt = document.querySelector('.drop-zone-prompt');
     const uploadForm = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const dropZone = document.getElementById('dropZone');
