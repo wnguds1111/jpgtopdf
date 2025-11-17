@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PDF Converter</title> <link rel="alternate" hreflang="ko-kr" href="https://jpgtopdf-five.vercel.app/index.html">
+    <link rel="alternate" hreflang="en" href="https://jpgtopdf-five.vercel.app/en/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://jpgtopdf-five.vercel.app/en/index.html">
+
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body>
+
+    <div class="container">
+        <div class="card input-section">
+            <div class="card-header">
+                <div class="header-gradient"></div>
+                <div class="header-content">
+                    <h2>Image to PDF Converter</h2>
+                    <p>Combine JPG, PNG files into a single PDF</p>
+                </div>
+            </div>
+            
+            <form id="uploadForm" class="card-body">
+                <div id="dropZone" class="drop-zone">
+                    <input type="file" id="fileInput" multiple accept="image/png, image/jpeg">
+                    <div class="drop-zone-prompt">
+                        <i class="fas fa-file-upload"></i>
+                        <p>Drag & drop images here, or click to upload</p>
+                        <span>(Multiple files allowed)</span>
+                    </div>
+                </div>
+                
+                <div id="fileList"></div>
+
+                <button type="submit" id="convertButton" class="primary-button" disabled>
+                    <i class="fas fa-file-pdf"></i> Convert to PDF </button>
+            </form>
+        </div>
+
+        <div class="card" id="loadingIndicator" style="display: none;">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Creating PDF file...</p> </div>
+        </div>
+
+        <a href="https://imageless-pink.vercel.app/en/" target="_blank" class="promo-banner">
+            <div class="banner-icon">
+                <i class="fas fa-images"></i>
+            </div>
+            <div class="banner-content">
+                <h3>Free Image Compressor!</h3>
+                <p>Build faster websites with lighter images.</p>
+            </div>
+            <div class="banner-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+
+        <div class="ads-banner coupang-area">
+            <p class="coupang-notice">
+                "This post may contain affiliate links, meaning I get a commission if you decide to make a purchase through my links, at no cost to you."
+            </p>
+            <div class="coupang-iframe-wrap">
+                <iframe src="https://ads-partners.coupang.com/widgets.html?id=942244&template=carousel&trackingCode=AF1351548&subId=&width=680&height=140&tsource=" width="680" height="140" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics></iframe>
+            </div>
+        </div>
+
+    </div> 
+
+    <script src="app.js"></script> </body>
+</html>
