@@ -1,0 +1,352 @@
+/* style.css */
+
+/* --- 새로운 테마 컬러 (파스텔 블루/그린) --- */
+:root {
+    --primary-color: #6A8EFE;   /* 메인 블루 (이전 main-blue 대체) */
+    --secondary-color: #6EE7B7; /* 보조 그린 (이전 success-green 대체) */
+    --accent-color: #A7C5F9;    /* 강조/옅은 블루 */
+    --text-dark: #333333;
+    --text-light: #6B7280;      /* 중간 회색 */
+    --text-lighter: #9CA3AF;    /* 옅은 회색 */
+    --card-bg: #FFFFFF;
+    --page-bg: #F4F7FC;         /* 아주 연한 파란색 배경 */
+    --border-light: #E5E7EB;    /* 옅은 회색 테두리 */
+    --shadow-light: rgba(0, 0, 0, 0.05); /* 옅은 그림자 */
+    --shadow-medium: rgba(0, 0, 0, 0.1); /* 중간 그림자 */
+}
+
+body {
+    background-color: var(--page-bg);
+    font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 16px; /* 모서리를 더 둥글게 */
+    box-shadow: 0 8px 30px var(--shadow-light); /* 그림자를 더 부드럽게 */
+    overflow: hidden;
+    border: 1px solid var(--border-light); /* 얇은 테두리 추가 */
+}
+
+/* 카드 헤더 (메인 타이틀 영역) */
+.card-header {
+    position: relative;
+    padding-bottom: 20px;
+}
+.header-gradient {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* 세련된 그라데이션 */
+    z-index: 1;
+}
+.header-content {
+    position: relative;
+    z-index: 2;
+    padding: 30px 30px 25px; /* 패딩 조정 */
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 타이틀 그림자 추가 */
+}
+.header-content h2 { 
+    margin: 0; 
+    font-size: 28px; /* 타이틀 글자 크기 키움 */
+    font-weight: 700; /* 더 굵게 */
+}
+.header-content p { 
+    margin: 8px 0 0; 
+    opacity: 0.95; 
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* --- 파일 업로드 영역 (Drop Zone) --- */
+.drop-zone {
+    position: relative;
+    border: 2px dashed var(--accent-color); /* 강조 색상 테두리 */
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #F8FAFC; /* 더 연한 배경 */
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.drop-zone:hover, .drop-zone.is-dragover {
+    background-color: #F0F4FC; /* 호버 시 약간 진한 배경 */
+    border-color: var(--primary-color); /* 메인 색상 테두리 */
+    box-shadow: 0 0 0 4px rgba(106, 142, 254, 0.1); /* 호버 시 그림자 추가 */
+}
+.drop-zone-prompt i {
+    font-size: 36px; /* 아이콘 크기 키움 */
+    color: var(--primary-color); /* 메인 색상 아이콘 */
+    margin-bottom: 18px;
+}
+.drop-zone-prompt p {
+    margin: 0;
+    font-size: 17px; /* 글자 크기 키움 */
+    font-weight: 600; /* 더 굵게 */
+    color: var(--text-dark);
+}
+.drop-zone-prompt span {
+    font-size: 15px;
+    color: var(--text-light);
+    margin-top: 5px;
+    display: block; /* 줄바꿈 */
+}
+.drop-zone input[type="file"] {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* --- 파일 목록 --- */
+#fileList {
+    margin-top: 25px;
+    font-size: 15px;
+    border-top: 1px dashed var(--border-light); /* 구분선 */
+    padding-top: 20px;
+}
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #fcfdfe; /* 더 연한 배경 */
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); /* 각 파일 아이템에도 그림자 */
+    border: 1px solid #F0F4FC; /* 파일 아이템 테두리 */
+}
+.file-item span {
+    flex-shrink: 0;
+}
+.file-item span:first-child {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 15px;
+    font-weight: 500;
+}
+.file-item .file-size {
+    font-size: 13px;
+    color: var(--text-light);
+    min-width: 140px; /* 너비 약간 늘림 */
+    text-align: right;
+    margin-right: 15px;
+}
+.file-item .status-icon {
+    min-width: 90px; /* 너비 약간 늘림 */
+    text-align: right;
+    font-size: 14px;
+}
+.file-item .status-icon i {
+    margin-right: 5px;
+}
+.file-item .status-icon.completed i.success {
+    color: var(--secondary-color); /* 성공 아이콘 색상 변경 */
+}
+.file-item .status-icon.failed i.error {
+    color: #EF4444; /* 빨간색으로 변경 */
+}
+
+.processing-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--primary-color); /* 메인 색상으로 변경 */
+    font-weight: 500;
+    font-size: 16px;
+}
+.processing-message i {
+    margin-right: 10px;
+}
+
+.total-size-info {
+    text-align: right;
+    font-size: 15px;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-light);
+    font-weight: 600; /* 더 굵게 */
+}
+.total-size-info strong {
+    color: var(--primary-color); /* 메인 색상으로 */
+}
+
+
+/* --- 버튼 스타일 --- */
+.primary-button {
+    width: 100%;
+    padding: 16px; /* 패딩 키움 */
+    margin-top: 30px; /* 여백 키움 */
+    background: linear-gradient(90deg, var(--primary-color), #5077F5); /* 그라데이션 버튼 */
+    color: white;
+    border: none;
+    border-radius: 10px; /* 더 둥글게 */
+    font-size: 17px; /* 글자 크기 키움 */
+    font-weight: 600; /* 더 굵게 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* 간격 키움 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px rgba(106, 142, 254, 0.3); /* 버튼 그림자 추가 */
+}
+.primary-button:hover {
+    transform: translateY(-2px); /* 호버 시 살짝 위로 */
+    box-shadow: 0 8px 25px rgba(106, 142, 254, 0.4); /* 호버 시 그림자 진하게 */
+}
+.primary-button:disabled {
+    background: #A0A0A0;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- 로딩 스피너 --- */
+.loading-spinner {
+    padding: 50px 30px; /* 패딩 키움 */
+    text-align: center;
+    color: var(--text-light);
+}
+.spinner {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid var(--primary-color); /* 스피너 색상 변경 */
+    border-radius: 50%;
+    width: 45px; /* 크기 키움 */
+    height: 45px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px; /* 여백 키움 */
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- 프로모션 배너 (맞춤법 검사기에서 가져온 녹색 테마 유지) --- */
+.promo-banner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #E6F7ED; /* 아주 연한 녹색 */
+    padding: 18px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 20px;
+    border: 1px solid #D1FAE5; /* 연한 녹색 테두리 */
+}
+
+.promo-banner:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.banner-icon {
+    font-size: 28px;
+    color: var(--secondary-color); /* 보조 녹색 */
+    background-color: white;
+    padding: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.banner-content {
+    flex-grow: 1;
+}
+
+.banner-content h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #16A34A; /* 진한 녹색 */
+    font-weight: 600;
+}
+
+.banner-content p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.banner-arrow i {
+    font-size: 20px;
+    color: var(--text-lighter); /* 옅은 회색 화살표 */
+}
+```http://googleusercontent.com/image_generation_content/3
+
+/* [파일 이름: style.css] - 파일 맨 아래에 추가 */
+
+/* [파일 이름: style.css] - 파일 맨 아래에 추가 */
+
+/* --- 쿠팡 파트너스 배너 --- */
+.ads-banner.coupang-area {
+    margin-top: 40px; /* 윗 콘텐츠(.promo-banner)와의 간격 */
+    padding-top: 20px;
+    border-top: 1px dashed #eee; /* 콘텐츠와 구분을 위한 상단 점선 */
+    width: 100%;
+    /* 배너를 .container 너비가 아닌 680px로 고정합니다. */
+    max-width: 680px; 
+    /* .container 내부에서 중앙 정렬 */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    /* 흰색 카드 밖으로 나와도 배경과 어울리도록 */
+    background: transparent; 
+}
+
+.coupang-area .coupang-notice {
+    font-size: 11px; 
+    color: #555; /* 배경색이 밝으므로 글자색 살짝 진하게 */
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* iframe 반응형 래퍼 */
+.coupang-area .coupang-iframe-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 680px; 
+    margin: 0 auto;
+    overflow: hidden;
+    /* iframe에 그림자나 둥근 모서리 추가 */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.coupang-area iframe {
+    /* 모바일 대응 */
+    width: 100%;
+    height: 140px; 
+    border: none;
+    scrolling: "no";
+    display: block; /* iframe 하단 공백 제거 */
+}
