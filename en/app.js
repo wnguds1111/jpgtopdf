@@ -1,172 +1,202 @@
 // [파일 이름: en/app.js]
-// 썸네일 미리보기 기능을 제거한 버전입니다.
+// (한국어 버전 app.js의 UI 텍스트만 영어로 번역한 버전입니다)
 
-// jsPDF 라이브러리 할당 (index.html에서 로드됨)
-const { jsPDF } = window.jspdf;
+document.addEventListener('DOMContentLoaded', () => {
+    // [✅ 확인] 이 변수들이 en/index.html에도 모두 있는지 확인해주세요.
+    const dropZonePrompt = document.querySelector('.drop-zone-prompt');
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const fileList = document.getElementById('fileList');
+    const convertButton = document.getElementById('convertButton');
+    const loadingIndicator = document.getElementById('loadingIndicator');
 
-// --- [ 0. DOM 요소 캐싱 ] ---
-const uploadForm = document.getElementById('uploadForm');
-const fileInput = document.getElementById('fileInput');
-const dropZone = document.getElementById('dropZone');
-const dropZonePrompt = document.querySelector('.drop-zone-prompt'); 
-const fileList = document.getElementById('fileList');
-const convertButton = document.getElementById('convertButton');
-const loadingIndicator = document.getElementById('loadingIndicator');
+    let selectedFiles = [];
+    let processedFiles = [];
 
-let uploadedImages = []; // 업로드된 이미지 파일들을 저장할 배열
+    // 'p' 태그 클릭 시 파일 입력창 열기 (ko 버전엔 없었지만, 에러 방지용으로 추가)
+    if (dropZonePrompt) {
+        dropZonePrompt.addEventListener('click', () => fileInput.click());
+    }
 
-// --- [ 1. 이벤트 리스너 설정 ] ---
+    // 파일 인풋이 변경될 때
+    fileInput.addEventListener('change', () => {
+        handleUserFiles(fileInput.files);
+    });
 
-// 'p' 태그 클릭 시 파일 입력창 열기
-dropZonePrompt.addEventListener('click', () => {
-    fileInput.click();
-});
+    // 드래그 앤 드롭 이벤트
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('is-dragover');
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('is-dragover');
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('is-dragover');
+        handleUserFiles(e.dataTransfer.files);
+    });
 
-// 파일 입력(input) 변경 시
-fileInput.addEventListener('change', handleFileSelect);
+    // 사용자가 선택한 원본 파일을 처리하는 함수
+    async function handleUserFiles(files) {
+        selectedFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+        processedFiles = [];
 
-// 드래그 앤 드롭 이벤트
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('drag-over');
-});
-
-dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('drag-over');
-});
-
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('drag-over');
-    fileInput.files = e.dataTransfer.files; // 드롭된 파일을 input에 할당
-    handleFileSelect(); // 파일 처리 함수 호출
-});
-
-// 'PDF로 변환하기' 버튼 클릭 시
-uploadForm.addEventListener('submit', convertToPDF);
-
-
-// --- [ 2. 핵심 함수 정의 ] ---
-
-// (1) 파일 선택 처리 함수
-function handleFileSelect() {
-    const files = fileInput.files;
-    if (!files) return;
-
-    // fileList UI 초기화
-    fileList.innerHTML = ''; // ✅ 썸네일이 있었다면 일단 지웁니다.
-    uploadedImages = []; // 배열 초기화
-
-    Array.from(files).forEach(file => {
-        // 유효성 검사 (이미지 파일인지)
-        if (!file.type.startsWith('image/')) {
-            alert(`Skipping non-image file: ${file.name}`);
+        fileList.innerHTML = ''; // 파일 목록 UI 초기화
+        
+        if (selectedFiles.length === 0) {
+            convertButton.disabled = true;
             return;
         }
-        
-        uploadedImages.push(file); // 유효한 파일만 배열에 추가
 
-        // ✅ [수정] KO 버전과 동일하게, 썸네일 및 텍스트 목록 생성 로직을
-        //    "전부" 제거합니다.
-        //    fileList.appendChild(...) 코드를 사용하지 않습니다.
-    });
-
-    updateConvertButton(); // 버튼 상태 업데이트
-}
-
-// (2) 변환 버튼 활성화/비활성화
-function updateConvertButton() {
-    if (uploadedImages.length > 0) {
-        convertButton.disabled = false;
-        convertButton.innerHTML = `<i class="fas fa-file-pdf"></i> Convert ${uploadedImages.length} Image(s) to PDF`;
-    } else {
         convertButton.disabled = true;
-        convertButton.innerHTML = `<i class="fas fa-file-pdf"></i> Convert to PDF`;
-    }
-}
+        // ✅ [영어 번역]
+        fileList.innerHTML = `<div class="processing-message"><i class="fas fa-spinner fa-spin"></i> Compressing images...</div>`;
 
-// (3) PDF 변환 실행 함수 (이하 코드는 이전과 동일)
-async function convertToPDF(e) {
-    e.preventDefault(); 
+        for (const file of selectedFiles) {
+            const listItem = document.createElement('div');
+            listItem.classList.add('file-item');
+            listItem.innerHTML = `
+                <span>${file.name}</span>
+                <span class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                <span class="status-icon"><i class="fas fa-circle-notch fa-spin"></i> Compressing...</span>
+            `;
+            fileList.appendChild(listItem);
 
-    if (uploadedImages.length === 0) {
-        alert('Please upload at least one image.');
-        return;
-    }
+            try {
+                // 압축 설정 (ko 버전과 동일: 1920, 0.9)
+                const compressedFile = await compressImage(file, 1920, 0.9);
+                
+                processedFiles.push(compressedFile);
 
-    loadingIndicator.style.display = 'block'; 
-    convertButton.disabled = true;
-
-    try {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const a4Width = 210;
-        const a4Height = 297;
-        const margin = 10; 
-
-        for (let i = 0; i < uploadedImages.length; i++) {
-            const file = uploadedImages[i];
-
-            if (i > 0) {
-                doc.addPage(); 
+                // ✅ [영어 번역]
+                listItem.querySelector('.file-size').textContent = `${(compressedFile.size / 1024 / 1024).toFixed(2)} MB (Compressed)`;
+                listItem.querySelector('.status-icon').innerHTML = '<i class="fas fa-check-circle success"></i> Done';
+                listItem.querySelector('.status-icon').classList.add('completed');
+            } catch (error) {
+                console.error(`Error compressing ${file.name}:`, error);
+                // ✅ [영어 번역]
+                listItem.querySelector('.status-icon').innerHTML = '<i class="fas fa-times-circle error"></i> Failed';
+                listItem.querySelector('.status-icon').classList.add('failed');
             }
+        }
+        
+        fileList.querySelector('.processing-message')?.remove();
+        convertButton.disabled = processedFiles.length === 0;
+        if (processedFiles.length > 0) {
+            const totalSize = processedFiles.reduce((sum, f) => sum + f.size, 0);
+            // ✅ [영어 번역]
+            fileList.insertAdjacentHTML('afterbegin', `<div class="total-size-info">Total compressed size: <strong>${(totalSize / 1024 / 1024).toFixed(2)} MB</strong></div>`);
+        }
+    }
 
-            const imgData = await readFileAsDataURL(file);
-            const img = await loadImage(imgData);
+    // 이미지 압축 및 리사이징 함수 (ko 버전과 100% 동일)
+    function compressImage(file, maxWidth, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
 
-            const imgRatio = img.width / img.height;
-            const availableWidth = a4Width - margin * 2;
-            const availableHeight = a4Height - margin * 2;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
 
-            let pdfImgWidth = img.width;
-            let pdfImgHeight = img.height;
+                    if (width > maxWidth) {
+                        height = Math.round(height * (maxWidth / width));
+                        width = maxWidth;
+                    }
 
-            if (pdfImgWidth > availableWidth || pdfImgHeight > availableHeight) {
-                if (imgRatio > (availableWidth / availableHeight)) {
-                    pdfImgWidth = availableWidth;
-                    pdfImgHeight = availableWidth / imgRatio;
-                } else {
-                    pdfImgHeight = availableHeight;
-                    pdfImgWidth = availableHeight * imgRatio;
-                }
-            }
+                    canvas.width = width;
+                    canvas.height = height;
 
-            const x = (a4Width - pdfImgWidth) / 2;
-            const y = (a4Height - pdfImgHeight) / 2;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height); 
 
-            doc.addImage(imgData, file.type.split('/')[1].toUpperCase(), x, y, pdfImgWidth, pdfImgHeight);
+                    canvas.toBlob(
+                        (blob) => {
+                            if (!blob) {
+                                reject(new Error('Canvas to Blob failed.'));
+                                return;
+                            }
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now(),
+                            });
+                            resolve(compressedFile);
+                        },
+                        'image/jpeg',
+                        quality
+                    );
+                };
+                img.onerror = (error) => reject(error);
+            };
+            reader.onerror = (error) => reject(error);
+        });
+    }
+
+    // "PDF로 변환하기" 버튼 클릭 (폼 제출)
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (processedFiles.length === 0) {
+            // ✅ [영어 번역]
+            alert('Please select images and wait for compression to complete.');
+            return;
         }
 
-        doc.save('converted_images.pdf'); 
+        loadingIndicator.style.display = 'block';
+        convertButton.disabled = true;
+        // ✅ [영어 번역]
+        convertButton.innerHTML = '<i class="fas fa-cog fa-spin"></i> Converting...';
 
-    } catch (error) {
-        console.error('PDF Conversion Error:', error);
-        alert('Failed to convert PDF. Please try again. Error: ' + error.message);
-    } finally {
-        loadingIndicator.style.display = 'none'; 
-        fileInput.value = null; 
-        fileList.innerHTML = '';
-        uploadedImages = [];
-        updateConvertButton(); 
-    }
-}
+        const formData = new FormData();
+        processedFiles.forEach(file => {
+            formData.append('images', file);
+        });
 
+        try {
+            // [중요] /en/ 폴더에 있지만, API 경로는 루트(/api/convert)를 바라봅니다.
+            const response = await fetch('/api/convert', {
+                method: 'POST',
+                body: formData,
+            });
 
-// --- [ 3. 헬퍼(Helper) 함수 ] ---
+            if (!response.ok) {
+                const errorText = await response.text();
+                // ✅ [영어 번역]
+                throw new Error(`PDF conversion failed: ${response.status} - ${errorText}`);
+            }
 
-function readFileAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+            const pdfBlob = await response.blob();
+            const url = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            // ✅ [영어 번역]
+            a.download = `converted_images_${Date.now()}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            selectedFiles = [];
+            processedFiles = [];
+            fileList.innerHTML = '';
+            convertButton.disabled = true;
+
+        } catch (error) {
+            console.error('Conversion Error:', error);
+            // ✅ [영어 번역]
+            alert(`An error occurred: ${error.message}`);
+        } finally {
+            loadingIndicator.style.display = 'none';
+            convertButton.disabled = false;
+            // ✅ [영어 번역]
+            convertButton.innerHTML = '<i class="fas fa-file-pdf"></i> Convert to PDF';
+        }
     });
-}
-
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-    });
-}
+});
